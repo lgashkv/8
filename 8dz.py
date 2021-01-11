@@ -58,8 +58,9 @@ for i in range(20):
 import requests
 
 class Rate:
-    def __init__(self, format_='value'): 
+    def __init__(self,  diff, format_='value'): 
         self.format = format_
+        self.diff = diff;
          
     def exchange_rates(self):
         self.r = requests.get('https://www.cbr-xml-daily.ru/daily_json.js')
@@ -69,29 +70,17 @@ class Rate:
         response = self.exchange_rates()
         
         if currency in response:     
-            if self.format == 'full':
+            if self.format == 'full' or  self.diff == 'False':
                 return response[currency]
             
             if self.format == 'value':
                 return response[currency]['Value']
             
-        return 'Erroy' 
-    
-    def __init__(self,diff):
-        response = self.exchange_rates()
-        
-        if diff in response:     
-            if self.diff == 'False':
-                return response[currency]
-            
-            if self.diff == 'True':
+            if  self.diff == 'True':
                 return response[currency]['Value'] - response[currency]['Previous']
-        
-    def set_diff_on(self) -> None:
-        self.diff = True
-        
-    def set_diff_off(self) -> None:
-        self.diff = False   
+            
+        return 'Erroy'
+  
        
     def eur(self):
         return self.make_format('EUR')
